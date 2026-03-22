@@ -33,7 +33,9 @@ operation.forEach(button => { // function for when an operation is clicked
     button.addEventListener("click", () => {
         if(dispNum === "" && dispOp === "") {
             dispNum = Number(display.textContent);
+            console.log("dispnum"+dispNum);
             dispOp = button.textContent;
+            console.log("dispop"+dispOp);
             operation.forEach(op => {
                 op.style.backgroundColor = "lightgray";
                 op.style.color = "black";    
@@ -42,8 +44,11 @@ operation.forEach(button => { // function for when an operation is clicked
             button.style.color = "white";
             operationUse = true;
             if(total !== 0) display.textContent = Number(display.textContent) + total;
+            console.log("display"+display.textContent);
+            console.log("total"+total);
         } else {
             dispNum2 = Number(display.textContent);
+            console.log("dispnum2"+dispNum2);
             switch(dispOp){
                 case "+":
                     display.textContent = dispNum + dispNum2;
@@ -59,6 +64,8 @@ operation.forEach(button => { // function for when an operation is clicked
                     break;            
             }
             total += Number(display.textContent);
+            display.textContent = total;
+            console.log(total+"total");
             dispNum = "";
             dispOp = "";
             dispNum2 = "";
