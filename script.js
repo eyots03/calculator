@@ -5,12 +5,18 @@ let display = document.querySelector(".display");
 let clear = document.querySelector("#clear");
 let backSpace = document.querySelector("#back");
 
-let input = []; // takes user input
 let operationUse = false; // tells if an operation is in use
 let dispNum = ""; // used for storing number after operation
 let dispOp = ""; // used for storing the operation
 let dispNum2 = "";
 let total = 0;
+
+function operationDefault() {
+    operation.forEach(op => {
+                op.style.backgroundColor = "lightgray";
+                op.style.color = "black";    
+            })
+}
 
 num.forEach(button => { // function for when a number is clicked
     button.addEventListener("click", () => {
@@ -18,10 +24,7 @@ num.forEach(button => { // function for when a number is clicked
             display.textContent = "";
             operationUse = false;
             display.textContent += button.textContent;
-            operation.forEach(op => {
-                op.style.backgroundColor = "lightgray";
-                op.style.color = "black";    
-            })
+            operationDefault();
         } else {
                 display.textContent += button.textContent;
             }
@@ -36,43 +39,59 @@ operation.forEach(button => { // function for when an operation is clicked
             console.log("dispnum"+dispNum);
             dispOp = button.textContent;
             console.log("dispop"+dispOp);
-            operation.forEach(op => {
-                op.style.backgroundColor = "lightgray";
-                op.style.color = "black";    
-            })
+            operationDefault();
             button.style.backgroundColor = "black";
             button.style.color = "white";
             operationUse = true;
-            if(total !== 0) display.textContent = Number(display.textContent) + total;
+            if(total !== 0) {
+                switch(dispOp) {
+                    case "+":
+                        display.textContent = Number(display.textContent) + total;
+                        break;
+                    case "-":
+                        display.textContent = total - Number(display.textContent);
+                        total -= dispNum;   
+                        break;
+                    case "×":
+                        display.textContent = total * Number(display.textContent);
+                        break;
+                    case "÷":
+                        display.textContent = total / Number(display.textContent);
+                }
+            }
             console.log("display"+display.textContent);
             console.log("total"+total);
         } else {
             dispNum2 = Number(display.textContent);
             console.log("dispnum2"+dispNum2);
-            switch(dispOp){
+            switch(dispOp) {
                 case "+":
                     display.textContent = dispNum + dispNum2;
+                    total += Number(display.textContent);
                     break;
                 case "-":
-                    display.textContent = dispNum - dispNum2;
+                    if(total === 0) {
+                        display.textContent = dispNum - dispNum2;
+                        total = Number(display.textContent);
+                    } else {
+                        total -= dispNum2;
+                    }
                     break;
                 case "×":
                     display.textContent = dispNum * dispNum2;
+                    total *= Number(display.textContent);
                     break;
                 case "÷":
                     display.textContent = dispNum / dispNum2;
+                    total /= Number(display.textContent);
                     break;            
             }
-            total += Number(display.textContent);
             display.textContent = total;
             console.log(total+"total");
             dispNum = "";
             dispOp = "";
             dispNum2 = "";
-            operation.forEach(op => {
-                op.style.backgroundColor = "lightgray";
-                op.style.color = "black";    
-            })
+            operationDefault();
             button.style.backgroundColor = "black";
             button.style.color = "white";
             operationUse = true;
@@ -91,10 +110,7 @@ clear.addEventListener("click", () => {
     dispOp = "";
     dispNum2 = "";
     total = 0;
-    operation.forEach(op => {
-                op.style.backgroundColor = "lightgray";
-                op.style.color = "black";    
-            })
+    operationDefault();
 });
 backSpace.addEventListener("click", () => display.textContent = display.textContent.slice(0, -1));
 
