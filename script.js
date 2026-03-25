@@ -6,7 +6,7 @@ let clear = document.querySelector("#clear");
 let backSpace = document.querySelector("#back");
 
 let operationUse = false; // tells if an operation is in use
-let dispNum = ""; // used for storing number after operation
+let dispNum = []; // used for storing number after operation
 let dispOp = []; // used for storing the operation
 let operator;
 let dispNum2 = "";
@@ -48,72 +48,74 @@ num.forEach(button => { // function for when a number is clicked
 
 operation.forEach(button => { // function for when an operation is clicked
     button.addEventListener("click", () => {
+        dispNum.push(Number(display.textContent));
         dispOp.push(button.textContent);
-        if(dispNum === "") {
-            dispNum = Number(display.textContent);
+        if(dispNum.length < 2) {
             operationDefault();
             operationStatus(button);
-            if(total !== 0) {
-                operator = dispOp[dispOp.length - 2];
-                switch(operator) {
-                    case "+":
-                        display.textContent = dispNum + total;
-                        total += dispNum;
-                        break;
-                    case "-":
-                        display.textContent = total - dispNum;
-                        total -= dispNum;   
-                        break;
-                    case "×":
-                        display.textContent = total * dispNum;
-                        total *= dispNum;
-                        break;
-                    case "÷":
-                        display.textContent = total / dispNum;
-                        total /= dispNum;
-                }
-            }
+            // if(total !== 0) {
+            //     operator = dispOp[dispOp.length - 2];
+            //     switch(operator) {
+            //         case "+":
+            //             display.textContent = dispNum + total;
+            //             total += dispNum;
+            //             break;
+            //         case "-":
+            //             display.textContent = total - dispNum;
+            //             total -= dispNum;   
+            //             break;
+            //         case "×":
+            //             display.textContent = total * dispNum;
+            //             total *= dispNum;
+            //             break;
+            //         case "÷":
+            //             display.textContent = total / dispNum;
+            //             total /= dispNum;
+            //     }
+            // }
 
         } else {
-            dispNum2 = Number(display.textContent);
-           dispOp.length > 2 ? operator = dispOp[dispOp.length - 2] : 
-           operator = dispOp[dispOp.length - 1];
+            // dispNum2 = Number(display.textContent);
+            // dispOp.length > 2 ? operator = dispOp[dispOp.length - 2] : 
+            operator = dispOp[dispOp.length - 2];
             switch(operator) {
                 case "+":
-                    if(total === 0) {
-                        display.textContent = dispNum + dispNum2;
+                    if(dispNum.length === 2) {
+                        display.textContent = dispNum[dispNum.length - 2] + dispNum[dispNum.length - 1];
                         total = Number(display.textContent);
                     } else {
-                        total += dispNum2;
+                        display.textContent = total + dispNum[dispNum.length - 1];
+                        total = Number(display.textContent);
                     }
                     break;
                 case "-":
-                    if(total === 0) {
-                        display.textContent = dispNum - dispNum2;
+                    if(dispNum.length === 2) {
+                        display.textContent = dispNum[dispNum.length - 2] - dispNum[dispNum.length - 1];
                         total = Number(display.textContent);
                     } else {
-                        total -= dispNum2;
+                        display.textContent = total - dispNum[dispNum.length - 1];
+                        total = Number(display.textContent);
                     }
                     break;
                 case "×":
-                    if(total === 0) {
-                        display.textContent = dispNum * dispNum2;
+                    if(dispNum.length === 2) {
+                        display.textContent = dispNum[dispNum.length - 2] * dispNum[dispNum.length - 1];
                         total = Number(display.textContent);
                     } else {
-                        total *= dispNum2;
+                        display.textContent = total * dispNum[dispNum.length - 1];
+                        total = Number(display.textContent);
                     }
                     break;
                 case "÷":
-                    if(total === 0) {
-                        display.textContent = dispNum / dispNum2;
+                    if(dispNum.length === 2) {
+                        display.textContent = dispNum[dispNum.length - 2] / dispNum[dispNum.length - 1];
                         total = Number(display.textContent);
                     } else {
-                        total /= dispNum2;
+                        display.textContent = total / dispNum[dispNum.length - 1];
+                        total = Number(display.textContent);
                     }
                     break;            
             }
-            display.textContent = total;
-            dispNum = "";
             operationDefault();
             operationStatus(button);
         }
@@ -122,7 +124,7 @@ operation.forEach(button => { // function for when an operation is clicked
              
 clear.addEventListener("click", () => {
     display.textContent = "";
-    dispNum = "";
+    dispNum.length = 0;
     dispOp.length = 0;
     dispNum2 = "";
     total = 0;
